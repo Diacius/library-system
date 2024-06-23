@@ -17,10 +17,12 @@
             <form id="input">
                 <div class="alert alert-warning" role="alert">This is in Beta!</div>
                 <div class="mb-3">
-                    <label for="barcode" class="form-label">Book Barcode:</label>
-                    <input type="text" name="barcode" id="barcode" class="form-control">
+                    <label for="barcode" class="form-label" >Book Barcode:</label>
+                    <input type="text" name="barcode" id="barcode" autocomplete="off" class="form-control">
                 </div>
                 <button type="submit" class="mb-3 btn btn-primary">Lookup</button>
+                <button type="reset" class="mb-3 btn btn-warning" onclick="javascript:clearOutput()">Clear Output</button>
+                <div id="status">
             </form>
         </div>
         <div class="">

@@ -14,8 +14,8 @@ form.addEventListener("submit", (event) => {
     isbn = bookData["isbn"]
     title = bookData["title"]
     author = bookData["author"];
-    outputTable = document.querySelector("#outputTable")
-    row = outputTable.insertRow(-1)
+    outputTable = document.querySelector("#outputTable").querySelector('#tbody')
+    row = outputTable.insertRow()
     barcodeCell = row.insertCell(0);
     barcodeCell.innerHTML = barcode;
     isbnCell = row.insertCell(1);
@@ -33,7 +33,15 @@ form.addEventListener("submit", (event) => {
     }
   });
 function moreInfo(barcode) {
-    const myModal = new bootstrap.Modal(document.getElementById('myModal'), options)
+    bookData = books[barcode]
+    let moreInfoModal = new bootstrap.Modal(document.getElementById('moreInfoModal'))
+    let moreInfoTitle = document.getElementById('moreInfoTitle');
+    moreInfoTitle.innerHTML = `More info about "${bookData["title"]}" by "${bookData["author"]}"`
+    moreInfoModal.show()
 
 
+}
+function clearOutput() {
+    var tbody = document.querySelector("#tbody");
+    tbody.innerHTML = ""
 }

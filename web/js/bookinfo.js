@@ -1,8 +1,21 @@
 books = {
     1: {"title": "big boats and how to sail them", "author": "rich billionaire", "isbn": "fakeisbn_notreal"}
 }
+let url = localStorage.getItem("url")
 const form = document.querySelector("#input")
 const statusOutput = document.querySelector('#status')
+function getJsonResponse(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true)
+    xhr.send();
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+            callback(JSON.parse(xhr.response));
+        }
+    }
+}
+
+
 form.addEventListener("submit", (event) => {
     // prevent a normal form submit and calculate the tickets needed
     event.preventDefault();
@@ -10,8 +23,7 @@ form.addEventListener("submit", (event) => {
     let formData = new FormData(form);
     barcode = formData.get("barcode")
     var xhr = new XMLHttpRequest();
-    url = "http://127.0.0.1:5000/bookinfo?barcode=" + barcode
-    xhr.open("GET", url, true)
+    xhr.open("GET", url + "/bookinfo?barcode=" + barcode, true)
     xhr.send();
     xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
@@ -42,29 +54,38 @@ form.addEventListener("submit", (event) => {
     
   });
 function moreInfo(barcode) {
-    
-    let moreInfoModal = new bootstrap.Modal(document.getElementById('moreInfoModal'))
+    let moreInfoModal = new bootstrap.Modal(document.getElementById('moreInfoModal'), "")
     let moreInfoTitle = document.getElementById('moreInfoTitle');
-    let moreInfoBody = document.getElementById('moreinfobody')
-    var xhr = new XMLHttpRequest();
-    url = "http://127.0.0.1:5000/bookinfo?barcode=" + barcode
-    xhr.open("GET", url, true)
-    xhr.send();
-    xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4) {
-            bookData = JSON.parse(xhr.response);
-            if (bookData) {
-                isbn = bookData[1]
-                title = bookData[2]
-                author = bookData[3];
-            }}}
-    moreInfoTitle.innerHTML = `More info about "${bookData["title"]}" by "${bookData["author"]}"`
-    
-    moreInfoModal.show()
-
-
+    let moreInfoBody = document.getElementById('moreInfoBody');
+    getJsonResponse(url + barcode, (response) => {
+        moreInfoTitle.innerHTML = `More info about ${response[2]} by ${response[3]}`
+    })
+    getJsonResponse(url + "/bookmoreinfo?barcode=" + barcode, (response) => {
+        moreInfoBody.innerHTML = response[1];
+        moreInfoModal.show()
+    })
 }
 function clearOutput() {
     var tbody = document.querySelector("#tbody");
     tbody.innerHTML = ""
+}
+document.addEventListener("DOMContentLoaded", (event) => {
+    let url = localStorage.getItem("url")
+    if (url == null) {
+        console.log("Oh no! there isn't a url configured!")
+        let moreInfoModal = new bootstrap.Modal(document.getElementById('moreInfoModal'), "")
+        let moreInfoTitle = document.getElementById('moreInfoTitle');
+        let moreInfoBody = document.getElementById('moreInfoBody');
+        moreInfoTitle.innerHTML = "No Server URL Configured!"
+        moreInfoBody.innerHTML = `The app will be broken until you configure one :) The URL you enter will be saved to your computer so you only need to enter it in once! Please enter the server URL provided to you by your admin below:<br /><label for="barcode" class="form-label">Server URL:</label>
+                    <input type="text" name="url" id="urlbox" autocomplete="off" class="form-control"><button type="submit" class="btn btn-primary" onclick="javascript:changeURL()">Submit</button>`
+        moreInfoModal.show();
+    }
+})
+
+function changeURL() {
+    urlbox = document.querySelector("#urlbox")
+    localStorage.setItem('url', urlbox.value)
+    let moreInfoBody = document.getElementById('moreInfoBody');
+    moreInfoBody.innerHTML = "Server URL changed! You're a legend, and you can close this box now 😊"
 }

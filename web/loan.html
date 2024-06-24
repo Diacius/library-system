@@ -53,14 +53,14 @@
         </div>
         <div>
             <p>Enter a book's barcode below, and a loaner's barcode</p>
-            <form id="input">
+            <form id="loanInput">
                 <div class="alert alert-warning" role="alert">This is in Beta!</div>
                 <div class="mb-3">
                     <label for="barcode" class="form-label" >Book Barcode:</label>
                     <input type="text" name="barcode" id="barcode" autocomplete="off" class="form-control">
                 </div>
                 <div class="mb-3">
-                    <label for="barcode" class="form-label" >Loaner Barcode:</label>
+                    <label for="loaner" class="form-label" >Loaner Barcode:</label>
                     <input type="text" name="loaner" id="loaner" autocomplete="off" class="form-control">
                 </div>
                 <button type="submit" class="mb-3 btn btn-primary">Loan</button>
@@ -89,7 +89,6 @@
                 </table>  
         </div>
     </div>
-    <script src="js/bookinfo.js"></script>
     <script src="js/borrow.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>

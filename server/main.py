@@ -3,6 +3,7 @@ from flask_cors import CORS
 import sqlite3, json, datetime
 from flask import current_app, g
 app = Flask(__name__)
+import random
 CORS(app)
 app.config["DATABASE"] = "demodb.sqlite"
 
@@ -33,8 +34,11 @@ def bookinfo():
     cur = con.cursor()
     query = cur.execute("SELECT * FROM books WHERE barcode =" + request.args.get("barcode"))
     book = query.fetchone()
-    con.close()
-    return Response(json.dumps(book), status=200)
+    if book:
+        con.close()
+        return Response(json.dumps(book), status=200)
+    else:
+        return Response(b'["0000000000"]', status=400)
 @app.route('/bookmoreinfo')
 def bookmoreinfo():
     con = sqlite3.connect("demodb.sqlite")
@@ -53,22 +57,23 @@ def borrow():
     currentTimestamp = datetime.datetime.now()
     loanDelta = datetime.timedelta(days=int(loanLength))
     loanStart = currentTimestamp.replace(microsecond=0).isoformat()
-    loanEnd = (currentTimestamp + loanDelta).replace(microsecond=0).isoformat()
+    loanEnd = (currentTimestamp + loanDelta).replace(microsecond=0).isoformat(
+    loanID = ran
     db = get_db()
     if not loanTo:
         error = "Person being loaned to is required, please supply a loaner barcode"
     if error is None:
         try:
             db.execute(
-                "INSERT INTO loans (barcode, onLoanTo, loanedOn, dueOn) VALUES (?,?,?,?)",
-                (barcode, loanTo, loanStart, loanEnd)
+                "INSERT INTO loans (loanID, barcode, onLoanTo, loanedOn, dueOn) VALUES (?,?,?,?)",
+                (loanID, barcode, loanTo, loanStart, loanEnd)
             )
             db.commit()
         except db.IntegrityError:
             error = "Book already on loan"
             return error
         else:
-            return f"succesfully loaned {barcode} to {loanTo}"
+            return b"{'msg':'succesfully loaned"+ barcode+ "to" + loanTo+"', dueOn:'"+ loanEnd+"'}"
     print(error)
 
 @app.route('/getusername', methods=["POST"])
@@ -82,6 +87,9 @@ def getuser():
     if error is None:
         a = db.execute("SELECT * FROM users WHERE barcode = ?", (user,))
         row = a.fetchone()
-        print(row.keys())
-        return Response(row["name"], status=200)
+        if row:
+            print(row.keys())
+            return Response(row["name"], status=200)
+        else:
+            return Response("user not found", status=400)
     print(error)

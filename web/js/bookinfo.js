@@ -28,7 +28,7 @@ form.addEventListener("submit", (event) => {
     xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
             bookData = JSON.parse(xhr.response);
-            if (bookData) {
+            if (bookData[0] == barcode) {
                 isbn = bookData[1]
                 title = bookData[2]
                 author = bookData[3];
@@ -46,9 +46,9 @@ form.addEventListener("submit", (event) => {
                 moreInfoCell= row.insertCell(4);
                 moreInfoCell.innerHTML = `<a href="javascript:moreInfo(${barcode})">More Info</a>`
                 }
-                else {
-                    statusOutput.innerHTML= `<div class="alert alert-danger" role="alert">Lookup Failed: Barcode did not match item in database. Try rescanning the book.</div>`
-                }
+            else {
+                statusOutput.innerHTML= `<div class="alert alert-danger" role="alert">Lookup Failed: Barcode did not match item in database. Try rescanning the book.</div>`
+            }
         }
       };
     

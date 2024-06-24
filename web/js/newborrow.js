@@ -42,7 +42,7 @@ async function getUserInfo(userBarcode) {
 async function sendBorrow(userBarcode, bookBarcode, loanLength) {
     let response = await fetch(url + "/borrow", {
         method: "POST",
-        cache: "no-cache",body:"loanTo="+userBarcode+"&loanLength="+loanLength+"&bookBarcode="+bookBarcode.value,
+        cache: "no-cache",body:"loanTo="+userBarcode+"&loanLength="+loanLength+"&bookBarcode="+bookBarcode,
         headers: {"Content-Type":"application/x-www-form-urlencoded"}
     })
     return response.json()
@@ -80,9 +80,9 @@ form.addEventListener("submit", async (event) => {
             loanedToCell = row.insertCell(5);
             loanedToCell.innerHTML = username+":<b>"+userBarcode+"</b>"
             let loanLength = document.querySelector('#loanLength').value
-            a= sendBorrow(userBarcode,barcode,loanLength)
-            dueOn = row.insertCell(5);
-            dueOn.innerHTML = a["dueOn"]
+            a = sendBorrow(userBarcode,barcode,loanLength)
+            dueOn = row.insertCell(6);
+            dueOn.innerHTML = a["loanEnd"]
         }
         else {
             statusOutput.innerHTML = statusOutput.innerHTML + `<div class="alert alert-danger" role="alert">User Invalid: the user barcode provided did not match an item in database.</div>`

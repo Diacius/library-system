@@ -57,23 +57,24 @@ def borrow():
     currentTimestamp = datetime.datetime.now()
     loanDelta = datetime.timedelta(days=int(loanLength))
     loanStart = currentTimestamp.replace(microsecond=0).isoformat()
-    loanEnd = (currentTimestamp + loanDelta).replace(microsecond=0).isoformat(
-    loanID = ran
+    loanEnd = (currentTimestamp + loanDelta).replace(microsecond=0).isoformat()
+    loanID = random.random()
     db = get_db()
     if not loanTo:
         error = "Person being loaned to is required, please supply a loaner barcode"
     if error is None:
         try:
+            print(loanID, barcode, loanTo, loanStart, loanEnd)
             db.execute(
-                "INSERT INTO loans (loanID, barcode, onLoanTo, loanedOn, dueOn) VALUES (?,?,?,?)",
-                (loanID, barcode, loanTo, loanStart, loanEnd)
+                "INSERT INTO loans (loanID, barcode, loanTo, loanStart, loanEnd) VALUES (?,?,?,?,?)",
+                ((loanID*1000 //1), str(barcode), str(loanTo), str(loanStart), str(loanEnd))
             )
             db.commit()
         except db.IntegrityError:
             error = "Book already on loan"
             return error
         else:
-            return b"{'msg':'succesfully loaned"+ barcode+ "to" + loanTo+"', dueOn:'"+ loanEnd+"'}"
+            return json.dumps({'msg':'succesfully loaned', "loanEnd": loanEnd})
     print(error)
 
 @app.route('/getusername', methods=["POST"])

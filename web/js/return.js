@@ -72,8 +72,9 @@ form.addEventListener("submit", async (event) => {
         moreInfoCell= row.insertCell(4);
         moreInfoCell.innerHTML = `<a href="javascript:moreInfo(${barcode})">More Info</a>`
         // Send the return to the server
-        a = endReturn(barcode)
-
+        a = sendReturn(barcode)
+        loanedTo = row.insertCell(5);
+        loanedTo.innerHTML = a["user"]
         
 
         }
@@ -82,7 +83,6 @@ form.addEventListener("submit", async (event) => {
         }
         
         // Process loan
-
         });
 document.addEventListener("DOMContentLoaded", (event) => {
     let url = localStorage.getItem("url")

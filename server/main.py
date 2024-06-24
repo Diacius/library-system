@@ -67,13 +67,16 @@ def borrow():
             print(loanID, barcode, loanTo, loanStart, loanEnd)
             db.execute(
                 "INSERT INTO loans (loanID, barcode, loanTo, loanStart, loanEnd) VALUES (?,?,?,?,?)",
-                str(barcode), str(barcode), str(loanTo), str(loanStart), str(loanEnd))
+                (str(barcode), str(barcode), str(loanTo), str(loanStart), str(loanEnd)))
             db.commit()
+            db.close()
         except db.IntegrityError:
             error = "Book already on loan"
             return error
         else:
+            db.close()
             return json.dumps({'msg':'succesfully loaned', "loanEnd": loanEnd})
+        
     print(error)
 
 @app.route('/getusername', methods=["POST"])
@@ -93,17 +96,19 @@ def getuser():
         else:
             return Response("user not found", status=400)
     print(error)
+    db.close()
 
 @app.route('/returnBook', methods=["GET"])
 def returnBook():
     barcode = request.args.get("barcode")
+    error = None
     db = get_db()
     if not barcode:
         error = "Person being loaned to is required, please supply a loaner barcode"
     if error is None:
         try:
-            b = db.execute("SELECT * FROM loans WHERE barcode = ?")
-            item = b.fetchone
+            b = db.execute("SELECT * FROM loans WHERE barcode = ?", barcode)
+            item = b.fetchone()
             print(item)
             if item:
                 a = db.execute(
@@ -114,4 +119,4 @@ def returnBook():
             error = "Book already returned"
             return error
         else:
-            return json.dumps({'msg':'succesfully returned', "user": item["loanTo"]})
+            return json.dumps({'msg':'succesfully returned'})

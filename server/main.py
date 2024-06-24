@@ -1,8 +1,10 @@
 from flask import Flask, request, Response, flash, session
 from flask_cors import CORS
-import sqlite3, json
+import sqlite3, json, datetime
 from flask import current_app, g
-
+app = Flask(__name__)
+CORS(app)
+app.config["DATABASE"] = "demodb.sqlite"
 
 def get_db():
     if 'db' not in g:
@@ -20,8 +22,7 @@ def close_db(e=None):
 
     if db is not None:
         db.close()
-app = Flask(__name__)
-CORS(app)
+
 @app.route("/")
 def hello_world():
     return "<p>Hello, World!</p>"
@@ -42,22 +43,45 @@ def bookmoreinfo():
     book = query.fetchone()
     con.close()
     return Response(json.dumps(book), status=200)
-@app.route('/borrow')
+@app.route('/borrow', methods=["POST"])
 def borrow():
     loanTo = request.form['loanTo']
     loanLength = request.form['loanLength']
     barcode = request.form['bookBarcode']
-    db = get_db
+    error = None
+    # create delta based on loanLength as number of days
+    currentTimestamp = datetime.datetime.now()
+    loanDelta = datetime.timedelta(days=int(loanLength))
+    loanStart = currentTimestamp.replace(microsecond=0).isoformat()
+    loanEnd = (currentTimestamp + loanDelta).replace(microsecond=0).isoformat()
+    db = get_db()
     if not loanTo:
         error = "Person being loaned to is required, please supply a loaner barcode"
     if error is None:
         try:
             db.execute(
                 "INSERT INTO loans (barcode, onLoanTo, loanedOn, dueOn) VALUES (?,?,?,?)",
-                (barcode, loanTo, currentTimestamp, currentTimestamp + loanLength)
+                (barcode, loanTo, loanStart, loanEnd)
             )
+            db.commit()
         except db.IntegrityError:
             error = "Book already on loan"
+            return error
         else:
             return f"succesfully loaned {barcode} to {loanTo}"
-    flash(error)
+    print(error)
+
+@app.route('/getusername', methods=["POST"])
+def getuser():
+    user = str(request.form['user'])
+    print(user)
+    error = None
+    db = get_db()
+    if not user:
+        error = "User being lookedup is required, please supply a loaner barcode"
+    if error is None:
+        a = db.execute("SELECT * FROM users WHERE barcode = ?", (user,))
+        row = a.fetchone()
+        print(row.keys())
+        return Response(row["name"], status=200)
+    print(error)

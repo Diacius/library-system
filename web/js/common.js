@@ -11,3 +11,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         moreInfoModal.show();
     }
 })
+function clearOutput() {
+    var tbody = document.querySelector("#tbody");
+    tbody.innerHTML = ""
+}

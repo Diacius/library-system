@@ -120,3 +120,7 @@ def returnBook():
             return error
         else:
             return json.dumps({'msg':'succesfully returned'})
+        
+@app.route('/addUser', methods=['GET'])
+def addUser():
+    

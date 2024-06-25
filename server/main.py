@@ -148,3 +148,15 @@ def addBook():
     ISBN = request.form["isbn"]
     title = request.form["title"]
     author = request.form["author"]
+    error = None
+    if not ISBN or not title or not author:
+        error = "Required value missing, provide ISBN, title and author"
+    if error is None:
+        barcode = int(random.random() * 1000000 // 1)
+        dbob = get_db()
+        # Write into DB
+        a = dbob.execute("INSERT INTO books (barcode, ISBN, title, author) VALUES (?,?,?,?)",
+                         (barcode, ISBN, title, author))
+        dbob.commit()
+        responseInfo = {"finalID": barcode}
+        return Response(json.dumps(responseInfo), status=200)

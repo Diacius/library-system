@@ -55,10 +55,14 @@
         </div>
         <div>
             <p>Enter a book's barcode below to return</p>
-            <form id="loanInput">
+            <form id="form">
                 <div class="alert alert-warning" role="alert">This is in Beta!</div>
                 <div class="mb-3">
-                    <p>The user barcode will be randomly generated</p>
+                    <p>The user barcode will be randomly generated, but if the user wants a specific ID you can enter one below</p>
+                </div>
+                <div class="mb-3">
+                  <label for="userid" class="form-label" >User's ID (optional):</label>
+                  <input type="text" name="userid" id="userid" autocomplete="off" class="form-control">
                 </div>
                 <div class="mb-3">
                   <label for="loaner" class="form-label" >User's Name:</label>

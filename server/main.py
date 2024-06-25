@@ -121,6 +121,25 @@ def returnBook():
         else:
             return json.dumps({'msg':'succesfully returned'})
         
-@app.route('/addUser', methods=['GET'])
+@app.route('/addUser', methods=['POST'])
 def addUser():
-    
+    usersname = str(request.form['username'])
+    error = None
+    db = get_db()
+    if not usersname:
+        error = "The users name is requirement"
+    if error is None:
+        # Generate an ID for the user
+        requestedID = request.form["requestedID"]
+        if requestedID:
+            # A custom ID was provided
+            a = db.execute("INSERT INTO users (barcode, name) VALUES (?,?)", (requestedID, usersname))
+            db.commit()
+            responseInfo = {"finalID": requestedID, "username": usersname}
+            return Response(json.dumps(responseInfo), status=200)
+        # 4 digit pseudorandom number
+        generatedID = (random.random() * 1000) // 1
+        a = db.execute("INSERT INTO users (barcode, name) VALUES (?,?)", (generatedID, usersname))
+        db.commit()
+        responseInfo = {"finalID": generatedID, "username": usersname}
+        return Response(json.dumps(responseInfo), status=200)

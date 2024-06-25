@@ -143,3 +143,8 @@ def addUser():
         db.commit()
         responseInfo = {"finalID": generatedID, "username": usersname}
         return Response(json.dumps(responseInfo), status=200)
+@app.route('/addBook', methods=["POST"])
+def addBook():
+    ISBN = request.form["isbn"]
+    title = request.form["title"]
+    author = request.form["author"]

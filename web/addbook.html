@@ -54,23 +54,27 @@
         </div>
       </nav>
         <div class="m-5">
-            <h1>Library System: User Creation</h1>
+            <h1>Library System: Book Creation</h1>
         </div>
         <div>
-            <p>Enter a book's barcode below to return</p>
+            <p>Enter a book's info below to add it to the system</p>
             <form id="form">
                 <div class="alert alert-warning" role="alert">This is in Beta!</div>
                 <div class="mb-3">
                     <p>The user barcode will be randomly generated, but if the user wants a specific ID you can enter one below</p>
                 </div>
                 <div class="mb-3">
-                  <label for="userid" class="form-label" >User's ID (optional):</label>
-                  <input type="text" name="userid" id="userid" autocomplete="off" class="form-control">
+                  <label for="userid" class="form-label" >Book ISBN</label>
+                  <input type="text" name="isbn" id="isbn" autocomplete="off" class="form-control">
                 </div>
                 <div class="mb-3">
-                  <label for="loaner" class="form-label" >User's Name:</label>
-                  <input type="text" name="username" id="username" autocomplete="off" class="form-control">
+                  <label for="title" class="form-label" >Books's Title:</label>
+                  <input type="text" name="title" id="username" autocomplete="off" class="form-control">
                 </div>
+                <div class="mb-3">
+                    <label for="title" class="form-label" >Books's Author:</label>
+                    <input type="text" name="title" id="username" autocomplete="off" class="form-control">
+                  </div>
                 <button type="submit" class="mb-3 btn btn-primary">Create A User</button>
                 <button type="reset" class="mb-3 btn btn-warning" onclick="">Reset Form</button>
                 <button type="button" class="mb-3 btn btn-warning" onclick="javascript:clearOutput()">Clear Output</button>
@@ -83,8 +87,8 @@
                 <table class="table table-striped" id="outputTable">
                     <thead>
                         <tr>
-                            <th scope="col">User Barcode</th>
-                            <th scope="col">User's Name</th>
+                            <th scope="col">Book's Barcode</th>
+                            <th scope="col">Book's Title</th>
                         </tr>
                     </thead>
                     <tbody id="tbody">

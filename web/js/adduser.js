@@ -7,6 +7,7 @@ async function createUser(usersName, requestedUserID) {
         body:"username="+usersName+"&requestedID="+requestedUserID,
         headers: {"Content-Type":"application/x-www-form-urlencoded"}
     })
+    return (await response).json()
 }
 form.addEventListener("submit", (event) => {
     event.preventDefault();

@@ -41,13 +41,16 @@
                 <a class="nav-link" href="bookinfo.html">Book Lookup</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="loan.html">Loan</a>
+                <a class="nav-link" href="loan.html">Loan</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="return.html">Return</a>
+                <a class="nav-link" href="return.html">Return</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="adduser.html">Add User</a>
+                <a class="nav-link" href="adduser.html">Add User</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="addbook.html">Add Book</a>
               </li>
             </ul>
           </div>
@@ -75,6 +78,10 @@
                     <label for="title" class="form-label" >Books's Author:</label>
                     <input type="text" name="title" id="username" autocomplete="off" class="form-control">
                   </div>
+                <div class="mb-3">
+                  <label for="moreinfo" class="form-label">More Info on Book:</label>
+                  <input type="text" name="moreinfo" id="moreinfo" autocomplete="off" class="form-control">
+                </div>
                 <button type="submit" class="mb-3 btn btn-primary">Create A Book</button>
                 <button type="reset" class="mb-3 btn btn-warning" onclick="">Reset Form</button>
                 <button type="button" class="mb-3 btn btn-warning" onclick="javascript:clearOutput()">Clear Output</button>

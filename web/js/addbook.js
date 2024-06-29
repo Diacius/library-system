@@ -19,7 +19,7 @@ async function proccess(event) {
     title = formData.get("title");
     author = formData.get("author");
     moreinfo = formData.get("moreinfo")
-    bb = await createBook(ISBN, title, author)
+    bb = await createBook(ISBN, title, author, moreinfo)
     console.log(bb)
     outputTable = document.querySelector("#outputTable").querySelector('#tbody')
     row = outputTable.insertRow(-1)

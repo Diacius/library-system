@@ -6,6 +6,7 @@ const form = document.querySelector("#input")
 const statusOutput = document.querySelector('#status')
 function getJsonResponse(url, callback) {
     var xhr = new XMLHttpRequest();
+    console.log(url)
     xhr.open("GET", url, true)
     xhr.send();
     xhr.onreadystatechange = () => {
@@ -33,7 +34,7 @@ form.addEventListener("submit", (event) => {
                 title = bookData[2]
                 author = bookData[3];
                 outputTable = document.querySelector("#outputTable").querySelector('#tbody')
-                row = outputTable.insertRow()
+                row = outputTable.insertRow(-1)
                 barcodeCell = row.insertCell(0);
                 barcodeCell.innerHTML = barcode;
                 isbnCell = row.insertCell(1);
@@ -57,12 +58,19 @@ function moreInfo(barcode) {
     let moreInfoModal = new bootstrap.Modal(document.getElementById('moreInfoModal'), "")
     let moreInfoTitle = document.getElementById('moreInfoTitle');
     let moreInfoBody = document.getElementById('moreInfoBody');
-    getJsonResponse(url + barcode, (response) => {
+    console.log(url);
+    getJsonResponse(url + "/bookinfo?barcode=" + barcode, (response) => {
         moreInfoTitle.innerHTML = `More info about ${response[2]} by ${response[3]}`
     })
     getJsonResponse(url + "/bookmoreinfo?barcode=" + barcode, (response) => {
-        moreInfoBody.innerHTML = response[1];
-        moreInfoModal.show()
+        if (response !== null) {
+            moreInfoBody.innerHTML = response[1];
+            moreInfoModal.show()
+        }
+        else {
+            moreInfoBody.innerHTML = "No extra info was provided when the book was added to the system"
+            moreInfoModal.show();
+        }
     })
 }
 function clearOutput() {

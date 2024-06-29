@@ -26,7 +26,7 @@ def close_db(e=None):
 
 @app.route("/")
 def hello_world():
-    return "<p>Hello, World!</p>"
+    return Response(b"Hello, World!", status=200)
 
 @app.route('/bookinfo')
 def bookinfo():

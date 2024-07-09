@@ -1,3 +1,9 @@
+// If you want to set a URL to use by default, uncomment this code
+/*
+// The server URL MUST NOT HAVE A TRAILING FORWARD SLASH!
+YOUR_URL = "http://10.10.10.10:8134"
+localStorage.setItem("url", YOUR_URL)
+*/
 let url = localStorage.getItem("url")
 async function checkUp() {
     let response = fetch(url + "/", {
